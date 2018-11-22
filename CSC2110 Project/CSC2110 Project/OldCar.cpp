@@ -13,16 +13,41 @@ void OldCar::SetMilage(int milage)
 
 const void OldCar::ReadFromFile(istream & in)
 {
-	
+	string VIN;
+	string make;
+	string model;
+	int year;
+	float price;
+	int milage;
+
+	in >> skipws >> VIN;
+	in >> skipws >> make;
+	in >> skipws >> model;
+	in >> skipws >> year;
+	in >> skipws >> price;
+	in >> skipws >> milage;
+
+	SetVIN(VIN);
+	SetMake(make);
+	SetModel(model);
+	SetYear(year);
+	SetPrice(price);
+	SetMilage(milage);
 }
 
 const void OldCar::OutputToFile(ostream & out)
 {
-	out << "This is a test";
+	out << left << setw(16) << GetCategory();
+	out << left << setw(16) << GetVIN();
+	out << left << setw(16) << GetMake();
+	out << left << setw(16) << GetModel();
+	out << left << setw(14) << GetYear();
+	out << left << setw(14) << GetPrice();
+	out << left << setw(10) << GetMilage();
 }
 
 
-OldCar::OldCar(): Car("", "", "", 0, 0, "")
+OldCar::OldCar(): Car("", "", "", 0, 0, "old")
 {
 	milage = 0;
 }

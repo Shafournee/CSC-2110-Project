@@ -13,6 +13,7 @@
 #include <string>
 #include <vector>
 #include <fstream>
+#include <iomanip>
 #include "Car.h"
 #include "NewCar.h"
 #include "OldCar.h"
@@ -20,7 +21,7 @@ using namespace std;
 
 // Called when the function begins
 // Read in values from file and add them to classes
-void ReadFromFile(vector<Car*>);
+void ReadFromFile(vector<Car*>&);
 
 // Used for displaying the menu
 void DisplayMenu();
@@ -35,10 +36,10 @@ void SellLeaseCar();
 void ReturnCar();
 
 // Adding new or old cards to the inventory
-void AddCar(vector<Car*>);
+void AddCar(vector<Car*>&);
 
 // Saving to file when the program is done
-void SaveToFile(vector<Car*>);
+void SaveToFile(vector<Car*>&);
 
 const string FILE_NAME = "Test.txt";
 
@@ -49,23 +50,11 @@ int main()
 	
 	OldCar car;
 
-	fstream myFile;
-
-	myFile.open(FILE_NAME);
-
-	if (myFile.fail())
-	{
-		cout << "The file failed to open!" << endl;
-	}
-
-	while (myFile.is_open())
-	{
-		myFile << car;
-		myFile.close();
-	}
 
 	// Read from the file at start
 	ReadFromFile(cars);
+
+
 
 	// Greet the user
 	cout << "Welcome to the Car Dealership System!" << endl;
@@ -96,11 +85,46 @@ int main()
 
 	SaveToFile(cars);
 
+	system("pause");
+
 	return 0;
 }
 
-void ReadFromFile(vector<Car*> cars)
+void ReadFromFile(vector<Car*> &cars)
 {
+	fstream myFile;
+
+	myFile.open(FILE_NAME);
+
+	if (myFile.fail())
+	{
+		cout << "The file failed to open!" << endl;
+	}
+
+	// Ignore the first line
+	myFile.ignore(1000, '\n');
+
+	while (!myFile.eof())
+	{
+		// Check the category, and use that to know if we're making a new car or old car
+		string category;
+		myFile >> category;
+		cout << category;
+		if (category == "new")
+		{
+			NewCar *car = new NewCar();
+			myFile >> *car;
+			cars.push_back(car);
+		}
+		else
+		{
+			OldCar *car = new OldCar();
+			myFile >> *car;
+			cars.push_back(car);
+		}
+	}
+
+	myFile.close();
 
 }
 
@@ -126,7 +150,7 @@ void ReturnCar()
 {
 }
 
-void AddCar(vector<Car*> cars)
+void AddCar(vector<Car*> &cars)
 {
 	char x;
 	// Ask the user if they want to add a new or old car
@@ -185,6 +209,35 @@ void AddCar(vector<Car*> cars)
 	}
 }
 
-void SaveToFile(vector<Car*> cars)
+void SaveToFile(vector<Car*> &cars)
 {
+	ofstream myFile;
+
+	myFile.open(FILE_NAME);
+
+	if (myFile.fail())
+	{
+		cout << "The file failed to open!" << endl;
+	}
+
+	// Formatting
+	myFile << left << setw(16) << "Category";
+	myFile << left << setw(16) << "VIN";
+	myFile << left << setw(16) << "Make";
+	myFile << left << setw(16) << "Model";
+	myFile << left << setw(14) << "Year";
+	myFile << left << setw(14) << "Price";
+	myFile << left << setw(14) << "Milage";
+	myFile << left << setw(20) << "WarrentyProvider";
+	myFile << endl;
+
+	// Output all cars to a file
+	for (int i = 0; i < cars.size() - 1; i++)
+	{
+		myFile << *cars[i];
+		myFile << endl;
+	}
+	
+	myFile.close();
+
 }

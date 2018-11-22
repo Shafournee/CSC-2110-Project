@@ -1,1 +1,6 @@
-This is a test
+Category        VIN             Make            Model           Year          Price         Milage        WarrentyProvider    
+old             523459670       Honda           Civic           2004          4000          235245    
+old             123433376       Ford            Fiesta          2010          9000          521332    
+new             723548397       GM              Chiva           2005          30000                         ford
+old             364459671       Ford            pinto           2001          2300          99999     
+new             432159670       Ford            Fiat            2010          24500                           GM
